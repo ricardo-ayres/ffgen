@@ -56,9 +56,13 @@ int FF_write(const FarbFeld *picture) {
 Pixel** FF_plot_pos(FarbFeld *picture, Point *pos, int npos) {
 	Pixel **pixmap = picture->pixmap;
 	Point p;
-	for (int i=0; i < npos; i++) {
+	uint32_t row;
+	uint32_t col;
+	for (int i = 0; i < npos; i++) {
 		p = denormalize(pos[i], picture->width, picture->height);
-		pixmap[(int)p.y][(int)p.x].R = 0xffff;
+		row = (uint32_t) p.y;
+		col = (uint32_t) p.x;
+		pixmap[row][col].R = 0xffff;
 	}
 	return pixmap;
 }
@@ -73,20 +77,23 @@ Pixel** build_pixmap(FarbFeld *picture) {
 		return NULL;
 	}
 	/* create pixmap */
-	for (int i = 0; i < picture->width; i++) {
-		pixmap[i] = malloc(sizeof(Pixel));
-		if (!(pixmap[i])) {
-			fprintf(stderr, "Could not allocate pixmap[%d]", i);
+	for (int row = 0; row < picture->height; row++) {
+		pixmap[row] = malloc(picture->width * sizeof(Pixel));
+		if (!(pixmap[row])) {
+			fprintf(stderr, "Could not allocate pixmap row: %d", row);
 			return NULL;
 		}
 	}
+
 	/* initialize to all zeros */
-	for (int i = 0; i < picture->height; i++) {
-		for (int j = 0; j < picture->width; j++) {
-			pixmap[i][j].R = 0;
-			pixmap[i][j].G = 0;
-			pixmap[i][j].B = 0;
-			pixmap[i][j].A = 0xffff; 
+	/* for each row of pixels */
+	for (int row = 0; row < (picture->height); row++) {
+		/* set each pixel */
+		for (int col = 0; col < (picture->width); col++) {
+			pixmap[row][col].R = 0;
+			pixmap[row][col].G = 0;
+			pixmap[row][col].B = 0;
+			pixmap[row][col].A = 0xffff; 
 		}
 	}
 	return pixmap;
@@ -126,35 +133,35 @@ uint8_t* serial_pixmap(const FarbFeld *picture) {
 	if (!output) {
 		return NULL;
 	}
-	/* helper variables */
-	uint16_t BE_R, BE_G, BE_B, BE_A;
-	uint8_t *pR, *pG, *pB, *pA;
-	/* byte counter to advande output */
-	int bc = 0;
-	for (int i = 0; i < picture->height; i++) {
-		for (int j = 0; j < picture->width; j++) {
-			/* red channel */
-			BE_R = bswap_16(pixmap[i][j].R);
-			pR = (uint8_t*) &BE_R;
-			memcpy(output+bc, pR, 2);
-			bc += 2;
-			/* green channel */
-			BE_G = bswap_16(pixmap[i][j].G);
-			pG = (uint8_t*) &BE_G;
-			memcpy(output+bc, pG, 2);
-			bc += 2;
-			/* blue channel */
-			BE_B = bswap_16(pixmap[i][j].B);
-			pB = (uint8_t*) &BE_B;
-			memcpy(output+bc, pB, 2);
-			bc += 2;
-			/* alpha channel */
-			BE_A = bswap_16(pixmap[i][j].A);
-			pA = (uint8_t*) &BE_A;
-			memcpy(output+bc, pA, 2);
-			bc += 2;
+
+	int out_cursor = 0;
+	uint8_t *p;
+	for (int row = 0; row < picture->height; row++) {
+		for (int col = 0; col < picture->width; col++) {
+			p = serial_pixel(pixmap[row][col]);
+			if (!p) {
+				fprintf(stderr, "Failed to serialize pixel (%d, %d)\n", col, row);
+				return NULL;
+			}
+			memcpy(output+out_cursor, p, FF_PIXEL_SIZE);
+			out_cursor += FF_PIXEL_SIZE;
 		}
 	}
+
 	return output;
 }
 
+uint8_t* serial_pixel(const Pixel p) {
+	uint16_t *sp = malloc(FF_PIXEL_SIZE);
+	if (!sp) {
+		fprintf(stderr, "Failed to allocate memory for pixel serialization!\n");
+		return NULL;
+	}
+	
+	sp[0] = bswap_16(p.R);
+	sp[1] = bswap_16(p.G);
+	sp[2] = bswap_16(p.B);
+	sp[3] = bswap_16(p.A);
+	
+	return (uint8_t*) sp;
+}

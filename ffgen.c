@@ -8,12 +8,12 @@
 
 
 int main() {
-	int width = 640;
-	int height = 480;
+	int width = 1440;
+	int height = 900;
 
 	FarbFeld *picture = FF_init(width, height);
 
-	int n = 1000;
+	int n = 10000;
 	Point *pos = malloc(n*sizeof(Point));
 	if (!pos) {
 		fprintf(stderr, "ffgen: oops, can't allocate pos!\n");

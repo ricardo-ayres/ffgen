@@ -46,3 +46,4 @@ Pixel** FF_plot_pos(FarbFeld *picture, Point *positions, int npos);
 Pixel** build_pixmap(FarbFeld *picture);
 uint8_t* serial_header(const FarbFeld *picture);
 uint8_t* serial_pixmap(const FarbFeld *picture);
+uint8_t* serial_pixel(const Pixel p);

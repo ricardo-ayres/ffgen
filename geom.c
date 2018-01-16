@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "geom.h"
 
 Point move(Point pos, Vector v, double scale) {
@@ -14,10 +15,10 @@ Vector direction(Point a, Point b) {
 }
 
 Point denormalize(Point p, int xsize, int ysize) {
-	Point dp;
-	dp.x = xsize*p.x;
-	dp.y = ysize*p.y;
-	return dp;
+	Point denorm_p;
+	denorm_p.x = xsize * (p.x);
+	denorm_p.y = ysize * (p.y);
+	return denorm_p;
 }
 
 

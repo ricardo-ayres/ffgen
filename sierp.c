@@ -33,9 +33,9 @@ Point* sierp(int iterations){
 	pos[0].y = p1.y;
 	int next;
 
-	for(int i=0; i<iterations; i++){
+	for(int i=1; i<iterations; i++){
 		next = rand()%3;
-		pos[i] = move(pos[i], direction(pos[i], triangle[next]), 0.5);
+		pos[i] = move(pos[i-1], direction(pos[i-1], triangle[next]), 0.5);
 	}
 	return pos;
 }
