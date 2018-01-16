@@ -1,7 +1,7 @@
 default: ffgen
 
-ffgen: ff.o
+ffgen: ff.o sierp.o
 
 clean:
-	rm wpgen ff.o
+	rm ffgen *.o 
 

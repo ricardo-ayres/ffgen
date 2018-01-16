@@ -35,9 +35,11 @@ typedef struct FarbFeld_s {
 /* constructor */
 FarbFeld* FF_init(uint32_t width, uint32_t height);
 
-/* write to stdout */
+/* write picture to stdout */
 int FF_write(const FarbFeld *picture);
 
+/* takes an array of positions and plots it in the pixmap */
+Pixel** FF_plot_pos(Point *positions);
 
 /* 'private' functions */
 Pixel** build_pixmap(FarbFeld *picture);

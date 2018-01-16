@@ -3,6 +3,8 @@
 #include <stdint.h>
 
 #include "ff.h"
+#include "geom.h"
+#include "sierp.h"
 
 
 int main() {
