@@ -59,10 +59,10 @@ Pixel** FF_plot_pos(FarbFeld *picture, Point *pos, int npos) {
 	uint32_t row;
 	uint32_t col;
 	for (int i = 0; i < npos; i++) {
-		p = denormalize(pos[i], picture->width, picture->height);
+		p = denormalize(pos[i], picture->width-1, picture->height-1);
 		row = (uint32_t) p.y;
 		col = (uint32_t) p.x;
-		pixmap[row][col].R = 0xffff;
+		pixmap[row][col].R += 0x1fff;
 	}
 	return pixmap;
 }
@@ -136,7 +136,7 @@ uint8_t* serial_pixmap(const FarbFeld *picture) {
 
 	int out_cursor = 0;
 	uint8_t *p;
-	for (int row = 0; row < picture->height; row++) {
+	for (int row = picture->height-1; row >= 0; row--) {
 		for (int col = 0; col < picture->width; col++) {
 			p = serial_pixel(pixmap[row][col]);
 			if (!p) {
