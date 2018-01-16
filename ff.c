@@ -53,6 +53,18 @@ int FF_write(const FarbFeld *picture) {
 }
 
 
+Pixel** FF_plot_pos(FarbFeld *picture, Point *pos, int npos) {
+	Pixel **pixmap = picture->pixmap;
+	Point p;
+	for (int i=0; i < npos; i++) {
+		p = denormalize(pos[i], picture->width, picture->height);
+		pixmap[(int)p.y][(int)p.x].R = 0xffff;
+	}
+	return pixmap;
+}
+
+
+/* 'private' functions */
 /* Return a pixmap corresponding to the picture dimensions in the header */
 Pixel** build_pixmap(FarbFeld *picture) {
 	Pixel **pixmap = malloc(picture->height * sizeof(Pixel*));

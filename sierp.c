@@ -41,19 +41,6 @@ Point* sierp(int iterations){
 }
 
 
-Point move(Point pos, Vector v, double scale) {
-	pos.x = pos.x + scale*v.vx;
-	pos.y = pos.y + scale*v.vy;
-	return pos;
-}
-
-Vector direction(Point a, Point b) {
-	Vector v;
-	v.vx = b.x - a.x;
-	v.vy = b.y - a.y;
-	return v;
-}
-
 
 
 

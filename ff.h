@@ -40,7 +40,7 @@ FarbFeld* FF_init(uint32_t width, uint32_t height);
 int FF_write(const FarbFeld *picture);
 
 /* takes an array of positions and plots it in the pixmap */
-Pixel** FF_plot_pos(Point *positions);
+Pixel** FF_plot_pos(FarbFeld *picture, Point *positions, int npos);
 
 /* 'private' functions */
 Pixel** build_pixmap(FarbFeld *picture);

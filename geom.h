@@ -11,5 +11,7 @@ typedef struct Vector_s {
 } Vector;
 
 Point move(Point pos, Vector v, double scale);
+
 Vector direction(Point a, Point b);
 
+Point denormalize(Point p, int xsize, int ysize);
