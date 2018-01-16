@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <byteswap.h>
 
+#include "geom.h"
 #include "ff.h"
 
 /* Return a pointer to a picture with given dimensions */

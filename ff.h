@@ -15,6 +15,7 @@
  * -------
  * 8 bytes total
  */
+
 #define FF_HEADER_SIZE 16
 #define FF_PIXEL_SIZE 8
 

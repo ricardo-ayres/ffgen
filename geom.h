@@ -10,6 +10,6 @@ typedef struct Vector_s {
 	double vy;
 } Vector;
 
-point move(point pos, vector v, double scale);
-vector direction(point a, point b);
+Point move(Point pos, Vector v, double scale);
+Vector direction(Point a, Point b);
 
