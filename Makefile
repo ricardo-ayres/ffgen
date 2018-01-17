@@ -1,6 +1,8 @@
+CFLAGS="-lm"
+
 default: ffgen
 
-ffgen: ff.o sierp.o geom.o
+ffgen: ff.o chaos.o geom.o
 
 clean:
 	rm ffgen *.o 

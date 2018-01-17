@@ -62,7 +62,7 @@ Pixel** FF_plot_pos(FarbFeld *picture, Point *pos, int npos) {
 		p = denormalize(pos[i], picture->width-1, picture->height-1);
 		row = (uint32_t) p.y;
 		col = (uint32_t) p.x;
-		pixmap[row][col].R += 0x1fff;
+		pixmap[row][col].R += 0x1111;
 	}
 	return pixmap;
 }

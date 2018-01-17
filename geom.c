@@ -1,10 +1,19 @@
 #include <stdio.h>
+#include <math.h>
 #include "geom.h"
 
 Point move(Point pos, Vector v, double scale) {
 	pos.x = pos.x + scale*v.vx;
 	pos.y = pos.y + scale*v.vy;
 	return pos;
+}
+
+Vector rotate_vector(Vector v, double deg) {
+	double rads = (2*M_PI)*deg/360;
+	Vector rv;
+	rv.vx = v.vx * cos(rads) - v.vy * sin(rads);
+	rv.vy = v.vx * sin(rads) + v.vy * cos(rads);
+	return rv;
 }
 
 Vector direction(Point a, Point b) {
