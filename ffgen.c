@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <time.h>
+#include <sys/random.h>
 
 #include "geom.h"
 #include "ff.h"
@@ -9,15 +9,13 @@
 
 
 int main() {
-	/* unsigned char *seed = malloc(sizeof(char));
-	fgets(seed, sizeof(int), stdin);
-	srand((unsigned int) *seed);
-	*/
+	unsigned int seed = 0;
+	getrandom(&seed, sizeof(int), 0);
+	fprintf(stderr, "main seed:  %010u\n", seed);
+	srand(seed);
 
-	srand(time(NULL));
-
-	int width = 1440;
-	int height = 900;
+	int width = 1024;
+	int height = 768;
 	if (width < 1 | height < 1) {
 		fprintf(stderr, "Picture dimension can't be zero or negative!\n");
 		exit(1);
@@ -31,9 +29,9 @@ int main() {
 		fprintf(stderr, "ffgen: oops, can't allocate pos!\n");
 	}
 
-	int verts = 3 + (rand()%5); /* verts in [3,7] */
-	int rule = rand()%3;
-	pos = chaos(n, verts, rule);
+	getrandom(&seed, sizeof(int), 0);
+	fprintf(stderr, "chaos seed: %010u\n", seed);
+	pos = chaos(n, seed);
 	
 	FF_plot_pos(picture, pos, n);
 
