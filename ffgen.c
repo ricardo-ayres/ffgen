@@ -24,18 +24,17 @@ int main() {
 	FarbFeld *picture = FF_init(width, height);
 
 	int n = 1000000;
-	Point *pos = malloc(n*sizeof(Point));
-	if (!pos) {
-		fprintf(stderr, "ffgen: oops, can't allocate pos!\n");
-	}
-
 	getrandom(&seed, sizeof(int), 0);
 	fprintf(stderr, "chaos seed: %010u\n", seed);
+	Point *pos = NULL;
 	pos = chaos(n, seed);
-	
-	FF_plot_pos(picture, pos, n);
 
+	FF_plot_pos(picture, pos, n);
 	FF_write(picture);
+
+	/* cleanup */
+	free(pos);
+	FF_destroy(picture);
 	
 	return 0;
 }

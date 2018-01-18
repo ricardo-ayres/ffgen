@@ -25,6 +25,19 @@ FarbFeld* FF_init(uint32_t width, uint32_t height) {
 	return picture;
 }
 
+/* Free FarbFeld memory */
+void FF_destroy(FarbFeld *picture) {
+	/* free up the pixmap first */
+	/* free all pixels from each row */
+	for (int row=0; row < picture->height; row++) {
+		free(picture->pixmap[row]);
+	} /* and now all rows */
+	free(picture->pixmap);
+	/* and finish by freeing the structure */
+	free(picture);
+	return;
+}
+
 
 /* Serialize and write picture to stdout. return status */
 int FF_write(const FarbFeld *picture) {
@@ -49,11 +62,15 @@ int FF_write(const FarbFeld *picture) {
 	for (int i=0; i < pixmap_len; i++) {
 		putchar(pixmap[i]);
 	}
+
+	/* free serialized header and serialized pixmap memory */
+	free(header);
+	free(pixmap);
 	return 0; /* success */
 }
 
 
-Pixel** FF_plot_pos(FarbFeld *picture, Point *pos, int npos) {
+void FF_plot_pos(FarbFeld *picture, Point *pos, int npos) {
 	Pixel **pixmap = picture->pixmap;
 	Point p;
 	uint32_t row;
@@ -64,7 +81,7 @@ Pixel** FF_plot_pos(FarbFeld *picture, Point *pos, int npos) {
 		col = (uint32_t) p.x;
 		pixmap[row][col].R += 0x1111;
 	}
-	return pixmap;
+	return;
 }
 
 
@@ -87,7 +104,7 @@ Pixel** build_pixmap(FarbFeld *picture) {
 
 	/* initialize to all zeros */
 	/* for each row of pixels */
-	for (int row = 0; row < (picture->height); row++) {
+	for (int row = 0; row < picture->height; row++) {
 		/* set each pixel */
 		for (int col = 0; col < (picture->width); col++) {
 			pixmap[row][col].R = 0;
@@ -145,6 +162,8 @@ uint8_t* serial_pixmap(const FarbFeld *picture) {
 			}
 			memcpy(output+out_cursor, p, FF_PIXEL_SIZE);
 			out_cursor += FF_PIXEL_SIZE;
+			/* free each temporary pixel after copying */
+			free(p);
 		}
 	}
 

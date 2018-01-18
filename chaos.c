@@ -9,7 +9,7 @@ chaos(unsigned int iterations, unsigned int seed)
 {
 	srand(seed);
 
-	Point *pos = malloc(iterations*sizeof(Point));
+	Point *pos = calloc(iterations, sizeof(Point));
 
 	if (!pos) {
 		fprintf(stderr, "chaos can't allocate memory!\n");
